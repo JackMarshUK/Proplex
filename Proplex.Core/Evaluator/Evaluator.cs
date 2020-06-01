@@ -19,7 +19,7 @@ namespace Proplex.Core.Evaluator
 
         private static int EvaluateExpression(ExpressionSyntax node)
         {
-            if(node is NumberExpressionSyntax n)
+            if(node is LiteraExpressionSyntax n)
             {
                 return (int)n.NumberToken.Value;
             }

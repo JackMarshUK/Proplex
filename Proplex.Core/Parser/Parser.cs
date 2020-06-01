@@ -1,12 +1,13 @@
 ﻿//  Proplex
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using Proplex.Core.Nodes;
 using Proplex.Errors;
 
 namespace Proplex.Core.Parser
 {
-    public class Parser
+    public sealed class Parser
     {
         private readonly SyntaxToken[] m_tokens;
         private int m_position;
@@ -19,7 +20,7 @@ namespace Proplex.Core.Parser
             SyntaxToken token;
             do
             {
-                token = lexer.NextToken();
+                token = lexer.Lex();
 
                 if(token.Kind != SyntaxKind.WhiteSpaceToken)
                 {
@@ -44,51 +45,53 @@ namespace Proplex.Core.Parser
             return current;
         }
 
-        private SyntaxToken Match(SyntaxKind kind)
+        private SyntaxToken MatchToken(SyntaxKind kind)
         {
             return this.Current.Kind == kind ? NextToken() : throw new InvalidTokenException($"ERROR 102: Unexpected token: <{this.Current.Kind}>, Expected: <{kind}>");
         }
 
-        private ExpressionSyntax ParseExpression()
-        {
-            return ParseTerm();
-        }
 
         public SyntaxTree Parse()
         {
-            
-            return new SyntaxTree(this.Diagnostics, ParseTerm(), Match(SyntaxKind.EndOfFileToken));
+            return new SyntaxTree(this.Diagnostics, ParseExpression(), MatchToken(SyntaxKind.EndOfFileToken));
         }
 
-        private ExpressionSyntax ParseTerm()
+        private ExpressionSyntax ParseExpression(int parentPrecedence = 0)
         {
-            var left = ParseFactor();
+           var left = ParsePrimaryExpression();
 
-            while (this.Current.Kind == SyntaxKind.PlusToken 
-                   || this.Current.Kind == SyntaxKind.MinusToken)
-            {
-                var operatorToken = NextToken();
-                var right = ParseFactor();
-                left = new BinaryExpressionSyntax(left, operatorToken, right);
-            }
+           while(true)
+           {
+               var precedence = GetBinaryOperatorPrecedence(Current.Kind);
+               if(precedence == 0 || precedence <= parentPrecedence)
+                   break;
 
-            return left;
+               var operatorToken = NextToken();
+               var right = ParseExpression(precedence);
+               left = new BinaryExpressionSyntax(left, operatorToken, right);
+           }
+
+           return left;
         }
 
-        private ExpressionSyntax ParseFactor()
+        private static int GetBinaryOperatorPrecedence(SyntaxKind kind)
         {
-            var left = ParsePrimaryExpression();
-
-            while ( this.Current.Kind == SyntaxKind.StarToken
-                   || this.Current.Kind == SyntaxKind.SlashToken)
+            switch(kind)
             {
-                var operatorToken = NextToken();
-                var right = ParsePrimaryExpression();
-                left = new BinaryExpressionSyntax(left, operatorToken, right);
-            }
+                case SyntaxKind.StarToken:
+                case SyntaxKind.SlashToken:
+                    return 2;
 
-            return left;
+                case SyntaxKind.PlusToken:
+                case SyntaxKind.MinusToken:
+                    return 1;
+
+                default:
+                    return 0;
+            }
         }
+
+
 
         private ExpressionSyntax ParsePrimaryExpression()
         {
@@ -96,12 +99,12 @@ namespace Proplex.Core.Parser
             {
                 var left = NextToken();
                 var expression = ParseExpression();
-                var right = Match(SyntaxKind.CloseParenthesisToken);
+                var right = MatchToken(SyntaxKind.CloseParenthesisToken);
                 return new ParenthesizedExpressionSyntax(left, expression, right);
             }
 
-            var numberToken = Match(SyntaxKind.NumberToken);
-            return new NumberExpressionSyntax(numberToken);
+            var numberToken = MatchToken(SyntaxKind.NumberToken);
+            return new LiteraExpressionSyntax(numberToken);
         }
 
         public IEnumerable<string> Diagnostics => m_diagnostics;

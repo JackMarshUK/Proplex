@@ -7,7 +7,7 @@ using Proplex.Errors;
 
 namespace Proplex.Core.Lexer
 {
-    public class Lexer
+    internal sealed class Lexer
     {
         private readonly string m_text;
         private int m_position;
@@ -25,7 +25,7 @@ namespace Proplex.Core.Lexer
             m_position++;
         }
 
-        public SyntaxToken NextToken()
+        public SyntaxToken Lex()
         {
 
             //< Numbers>

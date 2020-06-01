@@ -2,19 +2,19 @@
 
 namespace Proplex.Core.Nodes
 {
-    public sealed class NumberExpressionSyntax : ExpressionSyntax
+    public sealed class LiteraExpressionSyntax : ExpressionSyntax
     {
         public SyntaxToken NumberToken
         {
             get;
         }
 
-        public NumberExpressionSyntax(SyntaxToken numberToken)
+        public LiteraExpressionSyntax(SyntaxToken numberToken)
         {
             this.NumberToken = numberToken;
         }
         /// <inheritdoc />
-        public override SyntaxKind Kind => SyntaxKind.NumberExpression;
+        public override SyntaxKind Kind => SyntaxKind.LiteralExpression;
 
         /// <inheritdoc />
         public override IEnumerable<SyntaxNode> GetChildren()

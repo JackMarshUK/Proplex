@@ -5,7 +5,6 @@ namespace Proplex.Core.Nodes
 {
     public class SyntaxToken : SyntaxNode
     {
-
         public int Position
         {
             get;

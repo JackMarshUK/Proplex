@@ -1,5 +1,6 @@
 ﻿//  Proplex
 
+
 using Proplex.Core.Evaluator;
 using System;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Proplex
     {
         static void Main(string[] args)
         {
-            bool showTree = true;
+            var showTree = true;
             while(true)
             {
                 Console.WriteLine(">");
@@ -20,27 +21,18 @@ namespace Proplex
                 if(string.IsNullOrWhiteSpace(line))
                     return;
 
-                if(line == "#st")
+                if(Commands(line, ref showTree))
                 {
-                    showTree = !showTree;
-                    continue;
-                }
-
-                if(line == "#cls")
-                {
-                    Console.Clear();
                     continue;
                 }
 
                 var syntaxTree = SyntaxTree.Parse(line);
 
-                var colour = Console.ForegroundColor;
-
                 if(showTree)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                     PrettyPrint(syntaxTree.Root);
-                    Console.ForegroundColor = colour;
+                    Console.ResetColor();
                 }
 
                 if(!syntaxTree.Diagnostics.Any())
@@ -51,15 +43,37 @@ namespace Proplex
                     continue;
                 }
 
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-
-                foreach(string error in syntaxTree.Diagnostics)
-                {
-                    Console.WriteLine(error);
-                }
-
-                Console.ForegroundColor = colour;
+                PrintErrors(syntaxTree);
             }
+        }
+
+        private static bool Commands(string line, ref bool showTree)
+        {
+            if(line == "#st")
+            {
+                showTree = !showTree;
+                return true;
+            }
+
+            if(line != "#cls")
+            {
+                return false;
+            }
+
+            Console.Clear();
+            return true;
+
+        }
+
+        private static void PrintErrors(SyntaxTree syntaxTree)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            foreach(string error in syntaxTree.Diagnostics)
+            {
+                Console.WriteLine(error);
+            }
+
+            Console.ResetColor();
         }
 
         static void PrettyPrint(SyntaxNode node, string indent = "", bool isLast = true)
