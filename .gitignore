@@ -21,3 +21,12 @@ Proplex/obj/Debug/netcoreapp3.1/Proplex.dll
 Proplex/obj/Debug/netcoreapp3.1/Proplex.csproj.CoreCompileInputs.cache
 Proplex/bin/Debug/netcoreapp3.1/Proplex.pdb
 Proplex/obj/Debug/netcoreapp3.1/Proplex.exe
+*.cs
+*.pdb
+*.dll
+*.json
+*.cache
+*.txt
+*.targets
+*.props
+*.CopyComplete
