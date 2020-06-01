@@ -1,8 +1,10 @@
-﻿using System;
+﻿//  Proplex
+
+using Proplex.Core.Evaluator;
+using System;
 using System.Linq;
 using System.Reflection.Metadata;
-using Proplex.Lexer;
-using Proplex.Lexer.Nodes;
+using Proplex.Core.Nodes;
 
 namespace Proplex
 {
@@ -10,6 +12,7 @@ namespace Proplex
     {
         static void Main(string[] args)
         {
+            bool showTree = true;
             while(true)
             {
                 Console.WriteLine(">");
@@ -17,16 +20,45 @@ namespace Proplex
                 if(string.IsNullOrWhiteSpace(line))
                     return;
 
-                var parser = new Parser.Parser(line);
-                var expression = parser.Parse();
+                if(line == "#st")
+                {
+                    showTree = !showTree;
+                    continue;
+                }
+
+                if(line == "#cls")
+                {
+                    Console.Clear();
+                    continue;
+                }
+
+                var syntaxTree = SyntaxTree.Parse(line);
 
                 var colour = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.DarkGray;
 
-                PrettyPrint(expression);
+                if(showTree)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    PrettyPrint(syntaxTree.Root);
+                    Console.ForegroundColor = colour;
+                }
+
+                if(!syntaxTree.Diagnostics.Any())
+                {
+                    var evaluator = new Evaluator(syntaxTree.Root);
+                    var result = evaluator.Evaluate();
+                    Console.WriteLine(result);
+                    continue;
+                }
+
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+
+                foreach(string error in syntaxTree.Diagnostics)
+                {
+                    Console.WriteLine(error);
+                }
 
                 Console.ForegroundColor = colour;
-
             }
         }
 
@@ -54,7 +86,6 @@ namespace Proplex
             }
 
             var lastChild = node.GetChildren().LastOrDefault();
-
 
             foreach(var child in node.GetChildren())
             {

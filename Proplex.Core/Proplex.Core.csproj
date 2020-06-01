@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Proplex.Lexer\Proplex.Lexer.csproj" />
+    <ProjectReference Include="..\Proplex.Errors\Proplex.Errors.csproj" />
   </ItemGroup>
 
 </Project>

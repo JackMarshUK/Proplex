@@ -1,14 +1,19 @@
 ﻿//  Proplex
 
 using System;
+using System.Collections.Generic;
+using Proplex.Core.Nodes;
 using Proplex.Errors;
 
-namespace Proplex.Lexer
+namespace Proplex.Core.Lexer
 {
     public class Lexer
     {
         private readonly string m_text;
         private int m_position;
+        private List<string> m_diagnostics = new List<string>();
+
+        public IEnumerable<string> Diagnostics => m_diagnostics;
 
         public Lexer(string text)
         {
@@ -31,26 +36,29 @@ namespace Proplex.Lexer
                 return new SyntaxToken(SyntaxKind.EndOfFileToken, m_position, "\0", null);
             }
 
-            if(char.IsDigit(Current))
+            if(char.IsDigit(this.Current))
             {
                 var start = m_position;
 
-                while(char.IsDigit(Current))
+                while(char.IsDigit(this.Current))
                 {
                     Next();
                 }
 
                 var length = m_position - start;
                 var text = m_text.Substring(start, length);
-                int.TryParse(text, out var value);
+                if(!int.TryParse(text, out var value))
+                {
+                    throw new InvalidCastException(message: $"ERROR 103: The : The number {m_text} isnt a valid Int32");
+                }
                 return new SyntaxToken(SyntaxKind.NumberToken, start, text, value);
             }
 
-            if(char.IsWhiteSpace(Current))
+            if(char.IsWhiteSpace(this.Current))
             {
                 var start = m_position;
 
-                while (char.IsWhiteSpace(Current))
+                while (char.IsWhiteSpace(this.Current))
                 {
                     Next();
                 }
@@ -76,7 +84,7 @@ namespace Proplex.Lexer
                 case ')':
                     return new SyntaxToken(SyntaxKind.CloseParenthesisToken, m_position++, ")");
                 default:
-                    throw new InvalidTokenException("Invalid token entered: " + this.Current);
+                    throw new InvalidTokenException(message: $"ERROR 101: Bad character input: '{this.Current}'");
             }
         }
 

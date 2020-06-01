@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Proplex.Lexer.Nodes;
 
-namespace Proplex.Lexer
+namespace Proplex.Core.Nodes
 {
     public class SyntaxToken : SyntaxNode
     {

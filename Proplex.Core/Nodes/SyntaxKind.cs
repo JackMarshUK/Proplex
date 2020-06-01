@@ -1,4 +1,4 @@
-﻿namespace Proplex.Lexer
+﻿namespace Proplex.Core.Nodes
 {
     public enum SyntaxKind
     {
@@ -12,6 +12,7 @@
         CloseParenthesisToken,
         EndOfFileToken,
         NumberExpression,
-        BinaryExpression
+        BinaryExpression,
+        ParenthesizedExpression
     }
 }

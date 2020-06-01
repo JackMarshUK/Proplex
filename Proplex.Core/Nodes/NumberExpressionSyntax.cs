@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Proplex.Lexer.Nodes
+namespace Proplex.Core.Nodes
 {
     public sealed class NumberExpressionSyntax : ExpressionSyntax
     {
@@ -21,7 +19,7 @@ namespace Proplex.Lexer.Nodes
         /// <inheritdoc />
         public override IEnumerable<SyntaxNode> GetChildren()
         {
-            yield return NumberToken;
+            yield return this.NumberToken;
         }
     }
 }

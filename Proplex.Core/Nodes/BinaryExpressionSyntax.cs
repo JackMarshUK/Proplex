@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Proplex.Lexer.Nodes
+namespace Proplex.Core.Nodes
 {
     public sealed class BinaryExpressionSyntax : ExpressionSyntax
     {
@@ -34,9 +32,9 @@ namespace Proplex.Lexer.Nodes
         /// <inheritdoc />
         public override IEnumerable<SyntaxNode> GetChildren()
         {
-            yield return Left;
-            yield return OperatorToken;
-            yield return Right;
+            yield return this.Left;
+            yield return this.OperatorToken;
+            yield return this.Right;
         }
     }
 }
