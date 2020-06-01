@@ -1,4 +1,5 @@
-﻿using Proplex.Core.Nodes;
+﻿//  Proplex
+using Proplex.Core.Nodes;
 using Proplex.Errors;
 
 namespace Proplex.Core.Evaluator
@@ -22,6 +23,21 @@ namespace Proplex.Core.Evaluator
             if(node is LiteraExpressionSyntax n)
             {
                 return (int)n.NumberToken.Value;
+            }
+            if(node is UnaryExpressionSyntax u)
+            {
+                var operand = EvaluateExpression(u.Operand);
+
+                if(u.OperatorToken.Kind == SyntaxKind.PlusToken)
+                {
+                    return operand;
+                }
+                if(u.OperatorToken.Kind == SyntaxKind.MinusToken)
+                {
+                    return -operand;
+                }
+
+                throw new InvalidSyntaxKindException($"Error 104: Unexpected unary operator {u.OperatorToken.Kind}");
             }
 
             if(node is ParenthesizedExpressionSyntax p)
