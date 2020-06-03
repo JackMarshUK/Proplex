@@ -1,17 +1,22 @@
-﻿namespace Proplex.Core.Nodes
+﻿namespace Proplex.Core.Syntax
 {
     public enum SyntaxKind
     {
-        NumberToken,
+        //Tokens
+        BadToken,
+        EndOfFileToken,
         WhiteSpaceToken,
+        NumberToken,
         PlusToken,
         MinusToken,
         StarToken,
         SlashToken,
         OpenParenthesisToken,
         CloseParenthesisToken,
-        EndOfFileToken,
-        NumberExpression,
+
+        //Expressions
+        LiteralExpression,
+        UnaryExpression,
         BinaryExpression,
         ParenthesizedExpression
     }

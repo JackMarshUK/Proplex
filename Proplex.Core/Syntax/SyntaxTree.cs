@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Proplex.Core.Nodes
+namespace Proplex.Core.Syntax
 {
     public sealed class SyntaxTree
     {
@@ -29,7 +29,7 @@ namespace Proplex.Core.Nodes
 
         public static SyntaxTree Parse(string text)
         {
-            var parser = new Parser.Parser(text);
+            var parser = new Parser(text);
             return parser.Parse();
         }
     }

@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Proplex.Core.Nodes
+namespace Proplex.Syntax
 {
     public class SyntaxToken : SyntaxNode
     {
-
         public int Position
         {
             get;
