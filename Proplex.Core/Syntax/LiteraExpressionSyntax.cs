@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 
-namespace Proplex.Core.Nodes
+namespace Proplex.Core.Syntax
 {
     public sealed class LiteraExpressionSyntax : ExpressionSyntax
     {
-        public SyntaxToken NumberToken
+        public SyntaxToken LiteralToken
         {
             get;
         }
 
-        public LiteraExpressionSyntax(SyntaxToken numberToken)
+        public LiteraExpressionSyntax(SyntaxToken literalToken)
         {
-            this.NumberToken = numberToken;
+            this.LiteralToken = literalToken;
         }
         /// <inheritdoc />
         public override SyntaxKind Kind => SyntaxKind.LiteralExpression;
@@ -19,7 +19,7 @@ namespace Proplex.Core.Nodes
         /// <inheritdoc />
         public override IEnumerable<SyntaxNode> GetChildren()
         {
-            yield return this.NumberToken;
+            yield return this.LiteralToken;
         }
     }
 }

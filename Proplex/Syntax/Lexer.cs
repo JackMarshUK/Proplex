@@ -2,10 +2,9 @@
 
 using System;
 using System.Collections.Generic;
-using Proplex.Core.Nodes;
 using Proplex.Errors;
 
-namespace Proplex.Core.Lexer
+namespace Proplex.Syntax
 {
     internal sealed class Lexer
     {
@@ -69,6 +68,21 @@ namespace Proplex.Core.Lexer
                 return new SyntaxToken(SyntaxKind.WhiteSpaceToken, start, text);
             }
 
+            if(char.IsLetter(Current))
+            {
+                var start = m_position;
+
+                while(char.IsLetter(this.Current))
+                {
+                    Next();
+                }
+
+                var length = m_position - start;
+                var text = m_text.Substring(start, length);
+                var kind = SyntaxFacts.GetKeywordKind(text);
+                return new SyntaxToken(kind, start, text, text);
+            }
+
             switch(this.Current)
             {
                 case '+':
@@ -83,11 +97,23 @@ namespace Proplex.Core.Lexer
                     return new SyntaxToken(SyntaxKind.OpenParenthesisToken, m_position++, "(");
                 case ')':
                     return new SyntaxToken(SyntaxKind.CloseParenthesisToken, m_position++, ")");
-                default:
-                    throw new InvalidTokenException(message: $"ERROR 101: Bad character input: '{this.Current}'");
+                case '!':
+                    return new SyntaxToken(SyntaxKind.BangToken, m_position++, "!");
+                case '&':
+                    if(Lookahead == '&')
+                        return new SyntaxToken(SyntaxKind.AmpersandAmpersandToken, MovePosition(2), "&&");
+                    break;
+                case '|':
+                    if(Lookahead == '|')
+                        return new SyntaxToken(SyntaxKind.PipePipeToken, MovePosition(2), "||");
+                    break;
             }
+            throw new InvalidTokenException(message: $"ERROR 101: Bad character input: '{this.Current}'");
         }
 
-        private char Current => m_position >= m_text.Length ? '\0' : m_text[m_position];
+        private char Current => Peek(0);
+        private char Lookahead => Peek(1);
+        private  int MovePosition(int amount) => m_position += amount;
+        private Func<int, char> Peek => (int offset) => m_position + offset >= m_text.Length ? '\0' : m_text[m_position + offset];
     }
 }

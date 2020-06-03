@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Proplex.Core.Nodes
+namespace Proplex.Core.Syntax
 {
     public sealed class UnaryExpressionSyntax : ExpressionSyntax
     {

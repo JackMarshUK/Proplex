@@ -1,11 +1,11 @@
 ﻿//  Proplex
 
-
-using Proplex.Core.Evaluator;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
-using Proplex.Core.Nodes;
+using Proplex.Binding;
+using Proplex.Syntax;
 
 namespace Proplex
 {
@@ -27,6 +27,10 @@ namespace Proplex
                 }
 
                 var syntaxTree = SyntaxTree.Parse(line);
+                var binder = new Binder();
+                var boundExpression = binder.BindExpression(syntaxTree.Root);
+
+                var diagnostics = syntaxTree.Diagnostics.Concat(binder.Diagnostics);
 
                 if(showTree)
                 {
@@ -35,9 +39,10 @@ namespace Proplex
                     Console.ResetColor();
                 }
 
-                if(!syntaxTree.Diagnostics.Any())
+                
+                if(!diagnostics.Any())
                 {
-                    var evaluator = new Evaluator(syntaxTree.Root);
+                    var evaluator = new Evaluator.Evaluator(boundExpression);
                     var result = evaluator.Evaluate();
                     Console.WriteLine(result);
                     continue;

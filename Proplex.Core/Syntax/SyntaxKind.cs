@@ -1,4 +1,4 @@
-﻿namespace Proplex.Core.Nodes
+﻿namespace Proplex.Core.Syntax
 {
     public enum SyntaxKind
     {

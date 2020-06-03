@@ -1,11 +1,9 @@
 ﻿//  Proplex
 
 using System.Collections.Generic;
-using System.Diagnostics;
-using Proplex.Core.Nodes;
 using Proplex.Errors;
 
-namespace Proplex.Core.Parser
+namespace Proplex.Core.Syntax
 {
     public sealed class Parser
     {
@@ -16,7 +14,7 @@ namespace Proplex.Core.Parser
         public Parser(string text)
         {
             var tokens = new List<SyntaxToken>();
-            var lexer = new Lexer.Lexer(text);
+            var lexer = new Lexer(text);
             SyntaxToken token;
             do
             {
@@ -59,7 +57,7 @@ namespace Proplex.Core.Parser
         private ExpressionSyntax ParseExpression(int parentPrecedence = 0)
         {
             ExpressionSyntax left;
-           var unaryOperatorPrecedence = Current.Kind.GetUnaryOperatorPrecedence();
+           var unaryOperatorPrecedence = this.Current.Kind.GetUnaryOperatorPrecedence();
 
            if(unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedence)
            {
@@ -74,7 +72,7 @@ namespace Proplex.Core.Parser
 
            while(true)
            {
-               var precedence = Current.Kind.GetBinaryOperatorPrecedence();
+               var precedence = this.Current.Kind.GetBinaryOperatorPrecedence();
                if(precedence == 0 || precedence <= parentPrecedence)
                    break;
 

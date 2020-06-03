@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Proplex.Core.Nodes
+namespace Proplex.Core.Syntax
 {
     public abstract class SyntaxNode
     {
