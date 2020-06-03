@@ -14,6 +14,8 @@
         BangToken,
         AmpersandAmpersandToken,
         PipePipeToken,
+        EqualsEqualsToken,
+        BangEqualsToken,
         OpenParenthesisToken,
         CloseParenthesisToken,
         IdentifierKeyword,
@@ -27,7 +29,5 @@
         UnaryExpression,
         BinaryExpression,
         ParenthesizedExpression,
-
-
     }
 }

@@ -26,10 +26,6 @@ namespace Proplex.Syntax
 
         public SyntaxToken Lex()
         {
-
-            //< Numbers>
-            //+ - * / ( )
-            // whitespace
             if(m_position >= m_text.Length)
             {
                 return new SyntaxToken(SyntaxKind.EndOfFileToken, m_position, "\0", null);
@@ -97,8 +93,6 @@ namespace Proplex.Syntax
                     return new SyntaxToken(SyntaxKind.OpenParenthesisToken, m_position++, "(");
                 case ')':
                     return new SyntaxToken(SyntaxKind.CloseParenthesisToken, m_position++, ")");
-                case '!':
-                    return new SyntaxToken(SyntaxKind.BangToken, m_position++, "!");
                 case '&':
                     if(Lookahead == '&')
                         return new SyntaxToken(SyntaxKind.AmpersandAmpersandToken, MovePosition(2), "&&");
@@ -107,6 +101,13 @@ namespace Proplex.Syntax
                     if(Lookahead == '|')
                         return new SyntaxToken(SyntaxKind.PipePipeToken, MovePosition(2), "||");
                     break;
+                case '=':
+                    if(Lookahead == '=')
+                        return new SyntaxToken(SyntaxKind.EqualsEqualsToken, MovePosition(2), "==");
+                    break;
+                case '!':
+                    return this.Lookahead == '=' ? new SyntaxToken(SyntaxKind.BangEqualsToken, MovePosition(2), "!=") 
+                               : new SyntaxToken(SyntaxKind.BangToken, m_position++, "!=");
             }
             throw new InvalidTokenException(message: $"ERROR 101: Bad character input: '{this.Current}'");
         }

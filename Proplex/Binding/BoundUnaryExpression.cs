@@ -21,7 +21,7 @@ namespace Proplex.Binding
         }
 
         /// <inheritdoc />
-        public override Type Type => this.Operand.Type;
+        public override Type Type => this.Op.ResultType;
 
         /// <inheritdoc />
         public override BoundNodeKind kind => BoundNodeKind.UnaryExpression;

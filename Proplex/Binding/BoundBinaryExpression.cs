@@ -26,7 +26,7 @@ namespace Proplex.Binding
             get;
         }
 
-        public override Type Type => this.Left.Type;
+        public override Type Type => this.Op.ResultType;
 
         /// <inheritdoc />
         public override BoundNodeKind kind => BoundNodeKind.BinaryExpression;
