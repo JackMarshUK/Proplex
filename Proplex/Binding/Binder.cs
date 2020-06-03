@@ -1,5 +1,4 @@
 ﻿//  Proplex
-//  Copyright © 2019-2020 MJ Quinn Ltd. All rights reserved.
 
 using System;
 using System.Collections.Generic;
@@ -37,7 +36,7 @@ namespace Proplex.Binding
         {
 
             var boundOperand = BindExpression(syntax.Operand);
-            var boundOperatorKind = BindUnaryOperatorKind(syntax.OperatorToken.Kind, boundOperand.Type);
+            var boundOperatorKind = BoundUnaryOperator.Bind(syntax.OperatorToken.Kind, boundOperand.Type);
 
             return new BoundUnaryExpression(boundOperatorKind, boundOperand);
         }
@@ -46,7 +45,7 @@ namespace Proplex.Binding
         {
             var boundLeft = BindExpression(syntax.Left);
             var boundRight = BindExpression(syntax.Right);
-            var boundOperator = BindBinaryOperatorKind(syntax.OperatorToken.Kind, boundLeft.Type, boundRight.Type);
+            var boundOperator = BoundBinaryOperator.Bind(syntax.OperatorToken.Kind, boundLeft.Type, boundRight.Type);
 
             return new BoundBinaryExpression(boundLeft, boundOperator, boundRight);
         }

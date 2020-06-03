@@ -29,20 +29,20 @@ namespace Proplex.Evaluator
             {
                 var operand = EvaluateExpression(u.Operand);
 
-                if(u.OperatorKind == BoundUnaryOperatorKind.Identity)
+                if(u.Op.Kind == BoundUnaryOperatorKind.Identity)
                 {
                     return (int)operand;
                 }
-                else if(u.OperatorKind == BoundUnaryOperatorKind.Negation)
+                else if(u.Op.Kind == BoundUnaryOperatorKind.Negation)
                 {
                     return -(int)operand;
                 }
-                else if(u.OperatorKind == BoundUnaryOperatorKind.LogicalNegation)
+                else if(u.Op.Kind == BoundUnaryOperatorKind.LogicalNegation)
                 {
                     return !(bool)operand;
                 }
 
-                throw new InvalidSyntaxKindException($"Error 104: Unexpected unary operator {u.OperatorKind}");
+                throw new InvalidSyntaxKindException($"Error 104: Unexpected unary operator {u.Op.Kind}");
             }
 
             if(!(node is BoundBinaryExpression b))
@@ -53,7 +53,7 @@ namespace Proplex.Evaluator
             var left =  EvaluateExpression(b.Left);
             var right = EvaluateExpression(b.Right);
 
-            switch(b.OperatorKind)
+            switch(b.Op.Kind)
             {
                 case BoundBinaryOperatorKind.Addition:
                     return (int)left + (int)right;
@@ -68,7 +68,7 @@ namespace Proplex.Evaluator
                 case BoundBinaryOperatorKind.LogicalOr:
                     return (bool)left || (bool)right;
                 default:
-                    throw new InvalidSyntaxKindException($"Error 104: Unexpected binary operator {b.OperatorKind}");
+                    throw new InvalidSyntaxKindException($"Error 104: Unexpected binary operator {b.Op}");
             }
 
             

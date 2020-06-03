@@ -4,10 +4,10 @@ namespace Proplex.Binding
 {
     internal sealed class BoundBinaryExpression : BoundExpression
     {
-        public BoundBinaryExpression(BoundExpression left, BoundBinaryOperatorKind operatorKind, BoundExpression right)
+        public BoundBinaryExpression(BoundExpression left, BoundBinaryOperator op, BoundExpression right)
         {
             this.Left = left;
-            this.OperatorKind = operatorKind;
+            this.Op = op;
             this.Right = right;
         }
 
@@ -16,7 +16,7 @@ namespace Proplex.Binding
             get;
         }
 
-        public BoundBinaryOperatorKind OperatorKind
+        public BoundBinaryOperator Op
         {
             get;
         }

@@ -4,13 +4,13 @@ namespace Proplex.Binding
 {
     internal sealed class BoundUnaryExpression : BoundExpression
     {
-        public BoundUnaryExpression(BoundUnaryOperatorKind operatorKind, BoundExpression operand)
+        public BoundUnaryExpression(BoundUnaryOperator op, BoundExpression operand)
         {
-            this.OperatorKind = operatorKind;
+            this.Op = op;
             this.Operand = operand;
         }
 
-        public BoundUnaryOperatorKind OperatorKind
+        public BoundUnaryOperator Op
         {
             get;
         }
