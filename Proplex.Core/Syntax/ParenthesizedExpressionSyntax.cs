@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Proplex.Core.Syntax
+
 {
     public sealed class ParenthesizedExpressionSyntax : ExpressionSyntax
     {

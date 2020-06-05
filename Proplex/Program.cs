@@ -1,36 +1,38 @@
-﻿//  Proplex
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Reflection.Metadata;
-using Proplex.Binding;
-using Proplex.Syntax;
+using Proplex.Core.Evaluator;
+using Proplex.Core.Syntax;
 
 namespace Proplex
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
-            var showTree = true;
+            var showTree = false;
+
             while(true)
             {
-                Console.WriteLine(">");
+                Console.Write("> ");
                 var line = Console.ReadLine();
                 if(string.IsNullOrWhiteSpace(line))
                     return;
 
-                if(Commands(line, ref showTree))
+                if(line == "#showTree")
                 {
+                    showTree = !showTree;
+                    Console.WriteLine(showTree ? "Showing parse trees." : "Not showing parse trees");
+                    continue;
+                }
+                else if(line == "#cls")
+                {
+                    Console.Clear();
                     continue;
                 }
 
                 var syntaxTree = SyntaxTree.Parse(line);
-                var binder = new Binder();
-                var boundExpression = binder.BindExpression(syntaxTree.Root);
-
-                var diagnostics = syntaxTree.Diagnostics.Concat(binder.Diagnostics);
+                var compilation = new Compilation(syntaxTree);
+                var result = compilation.Evaluate();
 
                 if(showTree)
                 {
@@ -39,46 +41,39 @@ namespace Proplex
                     Console.ResetColor();
                 }
 
-                
-                if(!diagnostics.Any())
+                if(!result.Diagnostics.Any())
                 {
-                    var evaluator = new Evaluator.Evaluator(boundExpression);
-                    var result = evaluator.Evaluate();
-                    Console.WriteLine(result);
-                    continue;
+                    Console.WriteLine(result.Value);
                 }
+                else
+                {
+                    foreach(var diagnostic in result.Diagnostics)
+                    {
+                        Console.WriteLine();
 
-                PrintErrors(syntaxTree);
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine(diagnostic);
+                        Console.ResetColor();
+
+                        var prefix = line.Substring(0, diagnostic.Span.Start);
+                        var error = line.Substring(diagnostic.Span.Start, diagnostic.Span.Length);
+                        var suffix = line.Substring(diagnostic.Span.End);
+
+                        Console.Write("    ");
+                        Console.Write(prefix);
+
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.Write(error);
+                        Console.ResetColor();
+
+                        Console.Write(suffix);
+
+                        Console.WriteLine();
+                    }
+
+                    Console.WriteLine();
+                }
             }
-        }
-
-        private static bool Commands(string line, ref bool showTree)
-        {
-            if(line == "#st")
-            {
-                showTree = !showTree;
-                return true;
-            }
-
-            if(line != "#cls")
-            {
-                return false;
-            }
-
-            Console.Clear();
-            return true;
-
-        }
-
-        private static void PrintErrors(SyntaxTree syntaxTree)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            foreach(string error in syntaxTree.Diagnostics)
-            {
-                Console.WriteLine(error);
-            }
-
-            Console.ResetColor();
         }
 
         static void PrettyPrint(SyntaxNode node, string indent = "", bool isLast = true)
@@ -97,20 +92,12 @@ namespace Proplex
 
             Console.WriteLine();
 
-            indent += isLast ? "    " : "│    ";
-
-            if (!node.GetChildren().Any())
-            {
-                return;
-            }
+            indent += isLast ? "   " : "│  ";
 
             var lastChild = node.GetChildren().LastOrDefault();
 
             foreach(var child in node.GetChildren())
-            {
-                PrettyPrint(child, indent,child == lastChild);
-            }
+                PrettyPrint(child, indent, child == lastChild);
         }
     }
 }
-

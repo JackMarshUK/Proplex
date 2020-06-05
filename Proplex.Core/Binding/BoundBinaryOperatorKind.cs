@@ -1,4 +1,4 @@
-﻿namespace Proplex.Binding
+﻿namespace Proplex.Core.Binding
 {
     internal enum BoundBinaryOperatorKind
     {

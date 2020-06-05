@@ -1,12 +1,11 @@
 ﻿//  Proplex
 
 using Proplex.Core.Binding;
-using Proplex.Core.Syntax;
 using Proplex.Errors;
 
 namespace Proplex.Core.Evaluator
 {
-    public class Evaluator
+    internal class Evaluator
     {
         private readonly BoundExpression m_root;
 
@@ -15,31 +14,35 @@ namespace Proplex.Core.Evaluator
             m_root = root;
         }
 
-        public int Evaluate()
+        public object Evaluate()
         {
             return EvaluateExpression(m_root);
         }
 
-        private static int EvaluateExpression(BoundExpression node)
+        private static object EvaluateExpression(BoundExpression node)
         {
             if(node is BoundLiteralExpression n)
             {
-                return (int)n.Value;
+                return n.Value;
             }
             if(node is BoundUnaryExpression u)
             {
                 var operand = EvaluateExpression(u.Operand);
 
-                if(u.OperatorKind == BoundUnaryOperatorKind.Identity)
+                if(u.Op.Kind == BoundUnaryOperatorKind.Identity)
                 {
-                    return operand;
+                    return (int)operand;
                 }
-                if(u.OperatorKind == BoundUnaryOperatorKind.Negation)
+                else if(u.Op.Kind == BoundUnaryOperatorKind.Negation)
                 {
-                    return -operand;
+                    return -(int)operand;
+                }
+                else if(u.Op.Kind == BoundUnaryOperatorKind.LogicalNegation)
+                {
+                    return !(bool)operand;
                 }
 
-                throw new InvalidSyntaxKindException($"Error 104: Unexpected unary operator {u.OperatorKind}");
+                throw new InvalidSyntaxKindException($"Error 104: Unexpected unary operator {u.Op.Kind}");
             }
 
             if(!(node is BoundBinaryExpression b))
@@ -47,21 +50,29 @@ namespace Proplex.Core.Evaluator
                 throw new InvalidSyntaxNodeException($"Error 105: Unexpected node {node.Type}");
             }
 
-            var left = EvaluateExpression(b.Left);
+            var left =  EvaluateExpression(b.Left);
             var right = EvaluateExpression(b.Right);
 
-            switch(b.OperatorKind)
+            switch(b.Op.Kind)
             {
                 case BoundBinaryOperatorKind.Addition:
-                    return left + right;
+                    return (int)left + (int)right;
                 case BoundBinaryOperatorKind.Subtraction:
-                    return left - right;
+                    return (int)left - (int)right;
                 case BoundBinaryOperatorKind.Multiplication:
-                    return left * right;
+                    return (int)left * (int)right;
                 case BoundBinaryOperatorKind.Division:
-                    return left / right;
+                    return (int)left / (int)right;
+                case BoundBinaryOperatorKind.LogicalAnd:
+                    return (bool)left && (bool)right;
+                case BoundBinaryOperatorKind.LogicalOr:
+                    return (bool)left || (bool)right;
+                case BoundBinaryOperatorKind.Equals:
+                    return Equals(left, right);
+                case BoundBinaryOperatorKind.NotEquals:
+                    return !Equals(left, right);
                 default:
-                    throw new InvalidSyntaxKindException($"Error 104: Unexpected binary operator {b.OperatorKind}");
+                    throw new InvalidSyntaxKindException($"Error 104: Unexpected binary operator {b.Op}");
             }
 
             

@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Proplex.Core.Binding;
+using System;
 
-namespace Proplex.Binding
+namespace Proplex.Core.Binding
 {
     internal sealed class BoundUnaryExpression : BoundExpression
     {

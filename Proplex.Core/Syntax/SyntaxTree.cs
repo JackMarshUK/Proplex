@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Proplex.Core.Evaluator;
 
 namespace Proplex.Core.Syntax
 {
     public sealed class SyntaxTree
     {
-        public IReadOnlyList<string> Diagnostics
+        public IReadOnlyList<Diagnostic> Diagnostics
         {
             get;
         }
@@ -20,7 +21,7 @@ namespace Proplex.Core.Syntax
             get;
         }
 
-        public SyntaxTree(IEnumerable<string> diagnostics, ExpressionSyntax root, SyntaxToken endOfFileToken)
+        public SyntaxTree(IEnumerable<Diagnostic> diagnostics, ExpressionSyntax root, SyntaxToken endOfFileToken)
         {
             this.Diagnostics = diagnostics.ToArray();
             this.Root = root;

@@ -1,7 +1,7 @@
 ﻿using System;
-using Proplex.Syntax;
+using Proplex.Core.Syntax;
 
-namespace Proplex.Binding
+namespace Proplex.Core.Binding
 {
     internal sealed class BoundUnaryOperator
     {

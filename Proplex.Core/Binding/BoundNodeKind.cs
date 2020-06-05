@@ -1,6 +1,6 @@
 ﻿//  Proplex
 
-namespace Proplex.Binding
+namespace Proplex.Core.Binding
 {
     internal enum BoundNodeKind
     {

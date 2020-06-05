@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using Proplex.Core.Evaluator;
+
 namespace Proplex.Core.Syntax
 {
     public class SyntaxToken : SyntaxNode
@@ -19,6 +21,9 @@ namespace Proplex.Core.Syntax
         {
             get;
         }
+
+        public TextSpan Span => new TextSpan(Position, Text.Length);
+ 
 
         public SyntaxToken(SyntaxKind kind, int position, string text, object value)
         {

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proplex", "Proplex\Proplex.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proplex.Errors", "Proplex.Errors\Proplex.Errors.csproj", "{599361D0-6854-45BA-9715-4327488DB27B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proplex.Core", "Proplex.Core\Proplex.Core.csproj", "{C0BFDD97-EE6A-4E56-9F2B-EB63DB16ECFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{599361D0-6854-45BA-9715-4327488DB27B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{599361D0-6854-45BA-9715-4327488DB27B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{599361D0-6854-45BA-9715-4327488DB27B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0BFDD97-EE6A-4E56-9F2B-EB63DB16ECFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0BFDD97-EE6A-4E56-9F2B-EB63DB16ECFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0BFDD97-EE6A-4E56-9F2B-EB63DB16ECFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0BFDD97-EE6A-4E56-9F2B-EB63DB16ECFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

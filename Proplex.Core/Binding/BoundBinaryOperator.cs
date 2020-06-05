@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Proplex.Syntax;
+using Proplex.Core.Syntax;
 
-namespace Proplex.Binding
+namespace Proplex.Core.Binding
 {
     internal sealed class BoundBinaryOperator
     {
@@ -19,11 +19,11 @@ namespace Proplex.Binding
 
         private BoundBinaryOperator(SyntaxKind syntaxKind, BoundBinaryOperatorKind kind, Type leftType, Type rightType, Type resultType)
         {
-            this.SyntaxKind = syntaxKind;
-            this.Kind = kind;
-            this.LeftType = leftType;
-            this.RightType = rightType;
-            this.ResultType = resultType;
+            SyntaxKind = syntaxKind;
+            Kind = kind;
+            LeftType = leftType;
+            RightType = rightType;
+            ResultType = resultType;
         }
 
         public SyntaxKind SyntaxKind
